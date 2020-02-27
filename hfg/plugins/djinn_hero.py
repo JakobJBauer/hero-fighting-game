@@ -12,10 +12,10 @@ from shapes import *
 @plugin
 class DjinnHero(Hero):
     def __init__(self):
-        super().__init__(width=60, height=70, name="monster", title="Monster", special_color=pyxel.COLOR_CYAN)
+        super().__init__(width=60, height=70, name="djinn", title="Djinn", special_color=pyxel.COLOR_LIME)
         self.is_blocked = False
-        self.rect = Rectangle(0, 0, self.width, self.height, pyxel.COLOR_GREEN, self.frame)
-        self.sprinkles = Sprinkles(100, pyxel.COLOR_BROWN, self.rect)
+        # self.rect = Rectangle(0, 0, self.width, self.height, pyxel.COLOR_GREEN, self.frame)
+        #  self.sprinkles = Sprinkles(100, pyxel.COLOR_BROWN, self.rect)
 
     def _body(self):
         self.draw(self.rect)
