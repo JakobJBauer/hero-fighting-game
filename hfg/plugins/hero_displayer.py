@@ -46,7 +46,7 @@ imported_hero = None
 
 for item in module.__dict__.keys():
     if item.startswith("Test"):
-        imported_hero = getattr(module, item)()
+        imported_hero = getattr(module, item)(pyxel.COLOR_DARKGRAY)
         break
 
 App(imported_hero)

@@ -1,17 +1,22 @@
 import pyxel
 import time
+import random
 
 from hfg.base import threaded
-from hfg.plugins import Hero, Enemy
+from hfg.plugins import Hero, Enemy, plugin
 from hfg.shapes import Rectangle
 
 
+@plugin
 class TestHero(Hero):
-    def __init__(self):
-        super().__init__(10, 20)
+    def __init__(self, resources_path: str = None):
+        super().__init__()
+
+        self.resources_path = resources_path
+        self.color = random.randint(1, 10)
 
     def selection_preview(self):
-        self.draw(Rectangle(0, 0, 10, 20, pyxel.COLOR_GREEN, self.frame))
+        self.draw(Rectangle(0, 0, self.width, self.height, self.color, self.frame))
         self.release()
 
     def cycle_heads(self, direction):
@@ -23,44 +28,40 @@ class TestHero(Hero):
     def cycle_legs(self, direction):
         pass
 
-    @threaded
-    def start_animation(self):
-        for i in range(100):
-            time.sleep(1)
+    def start_animation(self, enemy):
+        for i in range(5):
+            time.sleep(0.05)
             self.move_frame(self.x + 1, self.y)
 
-    @threaded
     def attack(self, enemy: Enemy):
-        pass
+        self.health = 0
 
-    @threaded
     def super(self, enemy: Enemy):
         pass
 
-    @threaded
     def block(self, enemy: Enemy):
         pass
 
-    @threaded
     def walk(self, direction, enemy: Enemy):
+        self.x += 5 * direction
+
+    def win_animation(self, enemy):
         pass
 
-    @threaded
-    def win_animation(self):
+    def lose_animation(self, enemy):
         pass
 
-    @threaded
-    def lose_animation(self):
-        pass
-
-    @threaded
     def get_attacked(self, enemy, damage):
         pass
 
-    @threaded
     def get_pushed(self, enemy, distance):
         pass
 
-    @threaded
     def get_kicked(self, enemy, damage, distance):
         pass
+
+    def move_frame(self, x, y):
+        super().move_frame(x, y)
+
+    def display(self):
+        super().display()
