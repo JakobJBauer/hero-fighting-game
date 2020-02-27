@@ -72,7 +72,7 @@ class Rectangle(Displayable):
     def display_left(self):
         x, y = self.translate_left(self.x, self.y, self.frame)
 
-        pyxel.rect(x, y, self.width, self.height, self.color)
+        pyxel.rect(x - self.width, y - self.height, self.width, self.height, self.color)
 
 
 class RectangleBorder(Rectangle):
@@ -128,9 +128,9 @@ class Sprinkles(Displayable):
 
         for i in range(count):
             lowerx = rectangle.x
-            upperx = rectangle.x + rectangle.width
+            upperx = rectangle.x + rectangle.width - 1
 
-            lowery = rectangle.y
+            lowery = rectangle.y + 1
             uppery = rectangle.y + rectangle.height
 
             x = random.randint(lowerx, upperx)
