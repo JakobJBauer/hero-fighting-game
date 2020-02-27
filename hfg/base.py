@@ -17,3 +17,11 @@ def threaded(func):
 class ThreadStorage(dict, ABC):
     def store(self, name: str, thread: Thread):
         self[name] = thread
+
+    def running(self):
+        for value in self.values():
+            if value is not None:
+                if value.is_alive():
+                    return value.is_alive()
+
+        return False
