@@ -1,6 +1,9 @@
 import pyxel
 import random
-from hfg.drawing import Displayable, Rotatable
+import sys
+
+sys.path.append("..")
+from drawing import Displayable, Rotatable
 
 
 class Point(Displayable):
@@ -18,12 +21,12 @@ class Point(Displayable):
     def display(self):
         x, y = self.translate_point(self.x, self.y, self.frame)
 
-        pyxel.pix(x, y, self.color)
+        pyxel.pset(x, y, self.color)
 
     def display_left(self):
         x, y = self.translate_left(self.x, self.y, self.frame)
 
-        pyxel.pix(x, y, self.color)
+        pyxel.pset(x, y, self.color)
 
 
 class Line(Displayable, Rotatable):

@@ -1,9 +1,12 @@
 import pyxel
+import sys
+
+sys.path.append("..")
 
 from uuid import uuid4
 from abc import ABC, abstractmethod
-from hfg.base import ThreadStorage, threaded
-from hfg.drawing import Drawable, ReferenceFrame
+from base import ThreadStorage, threaded
+from drawing import Drawable, ReferenceFrame
 
 
 DEFAULT_WIDTH = 30

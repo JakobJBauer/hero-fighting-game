@@ -1,17 +1,20 @@
 import pyxel
 import time
-import hfg.plugins as plugins
+import sys
+
+sys.path.append("..")
+import plugins
 import os.path
 
 from enum import Enum
 from copy import deepcopy
 
-from hfg.base import ThreadStorage, threaded
-from hfg.drawing import Drawable, ReferenceFrame
-from hfg.helpers import FillerHero, HeroBar
-from hfg.shapes import Line, Rectangle, Sprinkles, Text, Circle
-from hfg.plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
-from hfg.importer import Importer
+from base import ThreadStorage, threaded
+from drawing import Drawable, ReferenceFrame
+from helpers import FillerHero, HeroBar
+from shapes import Line, Rectangle, Sprinkles, Text, Circle
+from plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
+from importer import Importer
 
 DISPLAY_CAPTION = "Hero Fighter Game"
 DISPLAY_WIDTH = 256
