@@ -41,9 +41,6 @@ class Drawable(Displayable):
         super().__init__(frame)
 
         if displayables is not None:
-            for item in displayables:
-                item.frame = self.frame
-
             self.displayables = displayables
         else:
             self.displayables = []
@@ -51,11 +48,11 @@ class Drawable(Displayable):
         self.intermediates = []
 
     def draw(self, displayable):
-        displayable.frame = self.frame
         self.intermediates.append(displayable)
 
     def release(self):
         self.displayables = self.intermediates
+        self.intermediates = []
 
     def display(self):
         for displayable in self.displayables:
