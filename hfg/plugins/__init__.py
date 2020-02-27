@@ -13,6 +13,13 @@ DEFAULT_SPECIAL = 100
 DEFAULT_SPECIAL_COLOR = pyxel.COLOR_YELLOW
 
 
+def plugin(cls):
+    if issubclass(cls, Hero):
+        cls._is_hero_plugin = True
+
+    return cls
+
+
 class Enemy(Drawable, ThreadStorage, ABC):
     def __init__(self, width: int = DEFAULT_WIDTH, height: int = DEFAULT_HEIGHT,
                  health: int = DEFAULT_HEALTH, special: int = DEFAULT_SPECIAL, special_color=DEFAULT_SPECIAL_COLOR,
@@ -34,6 +41,11 @@ class Enemy(Drawable, ThreadStorage, ABC):
         else:
             self.meta = {}
 
+    def __init_subclass__(cls, **kwargs):
+        cls.get_attacked = threaded(cls.get_attacked)
+        cls.get_pushed = threaded(cls.get_pushed)
+        cls.get_kicked = threaded(cls.get_kicked)
+
     @property
     def x(self):
         return self.frame.x
@@ -50,17 +62,20 @@ class Enemy(Drawable, ThreadStorage, ABC):
     def y(self, value):
         self.frame.y = value
 
-    @threaded
+    def move_to(self, enemy, distance):
+        if self.x > enemy.x:
+            self.x -= distance
+        else:
+            self.x += distance
+
     @abstractmethod
     def get_attacked(self, enemy, damage):
         pass
 
-    @threaded
     @abstractmethod
     def get_pushed(self, enemy, distance):
         pass
 
-    @threaded
     @abstractmethod
     def get_kicked(self, enemy, damage, distance):
         pass
@@ -77,6 +92,16 @@ class Hero(Enemy, ABC):
 
         self.name = name
         self.title = title
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.start_animation = threaded(cls.start_animation)
+        cls.attack = threaded(cls.attack)
+        cls.super = threaded(cls.super)
+        cls.block = threaded(cls.block)
+        cls.walk = threaded(cls.walk)
+        cls.win_animation = threaded(cls.win_animation)
+        cls.lose_animation = threaded(cls.lose_animation)
 
     @abstractmethod
     def selection_preview(self):
@@ -96,37 +121,37 @@ class Hero(Enemy, ABC):
 
     @abstractmethod
     @threaded
-    def start_animation(self):
+    def start_animation(self, enemy: Enemy):
         pass
 
-    @threaded
     @abstractmethod
+    @threaded
     def attack(self, enemy: Enemy):
         pass
 
-    @threaded
     @abstractmethod
+    @threaded
     def super(self, enemy: Enemy):
         pass
 
-    @threaded
     @abstractmethod
+    @threaded
     def block(self, enemy: Enemy):
         pass
 
-    @threaded
     @abstractmethod
+    @threaded
     def walk(self, direction, enemy: Enemy):
         pass
 
-    @threaded
     @abstractmethod
-    def win_animation(self):
+    @threaded
+    def win_animation(self, enemy: Enemy):
         pass
 
-    @threaded
     @abstractmethod
-    def lose_animation(self):
+    @threaded
+    def lose_animation(self, enemy: Enemy):
         pass
 
 
