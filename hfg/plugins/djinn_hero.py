@@ -10,7 +10,7 @@ from shapes import *
 
 
 @plugin
-class MonsterHero(Hero):
+class DjinnHero(Hero):
     def __init__(self):
         super().__init__(width=60, height=70, name="monster", title="Monster", special_color=pyxel.COLOR_CYAN)
         self.is_blocked = False
