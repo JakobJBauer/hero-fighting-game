@@ -77,7 +77,7 @@ MINIMUM_HERO_DISTANCE = 5
 
 
 class GameStates(Enum):
-    RESTART = 0
+    RESET = 0
     SELECT_RIGHT = 1
     SELECT_LEFT = 2
     START = 3
@@ -153,7 +153,7 @@ class App:
         self.display = Display()
 
         self.heroes = heroes
-        self.state = GameStates.RESTART
+        self.state = GameStates.RESET
 
         self.button_clf_max = CLF_DELAY * DISPLAY_FPS
         self.button_clf = 0
@@ -260,7 +260,7 @@ class App:
             self.state = next_state
 
     def update(self):
-        if self.state == GameStates.RESTART:
+        if self.state == GameStates.RESET:
             self.heroes_selection = HeroesSelection(self.heroes)
 
             self.state = GameStates.SELECT_RIGHT
@@ -348,7 +348,7 @@ class App:
             self.display.draw(Text(f"Game over! Player {position} ({winner_name}) wins!", 10, 10, pyxel.COLOR_WHITE,
                                    ReferenceFrame()))
             if not (self.right.running() or self.left.running()):
-                self.state = GameStates.RESTART
+                self.state = GameStates.RESET
 
     def draw(self):
         if CLEAR_SCREEN:
