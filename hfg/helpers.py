@@ -1,8 +1,6 @@
 import math
 import sys
 
-sys.path.append("..")
-
 from base import threaded
 from plugins import Hero, Enemy
 from shapes import Line

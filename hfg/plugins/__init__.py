@@ -1,8 +1,6 @@
 import pyxel
 import sys
 
-sys.path.append("..")
-
 from uuid import uuid4
 from abc import ABC, abstractmethod
 from base import ThreadStorage, threaded

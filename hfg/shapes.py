@@ -2,7 +2,6 @@ import pyxel
 import random
 import sys
 
-sys.path.append("..")
 from drawing import Displayable, Rotatable
 
 

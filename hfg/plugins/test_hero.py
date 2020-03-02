@@ -3,8 +3,6 @@ import time
 import random
 import sys
 
-sys.path.append("..")
-
 from base import threaded
 from plugins import Hero, Enemy, plugin
 from shapes import Rectangle

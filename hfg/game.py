@@ -1,8 +1,6 @@
 import pyxel
 import time
 import sys
-
-sys.path.append("..")
 import plugins
 import os.path
 

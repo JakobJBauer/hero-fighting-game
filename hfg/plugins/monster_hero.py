@@ -2,8 +2,6 @@ import pyxel
 import time
 import sys
 
-sys.path.append("..")
-
 from plugins import Hero, Enemy, plugin
 from base import threaded
 from shapes import *
