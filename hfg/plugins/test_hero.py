@@ -1,10 +1,11 @@
 import pyxel
 import time
 import random
+import sys
 
-from hfg.base import threaded
-from hfg.plugins import Hero, Enemy, plugin
-from hfg.shapes import Rectangle
+from base import threaded
+from plugins import Hero, Enemy, plugin
+from shapes import Rectangle
 
 
 @plugin

@@ -2,7 +2,7 @@ import sys
 import pyxel
 import importlib
 
-from hfg.plugins import Enemy, Hero
+from plugins import Enemy, Hero
 
 
 arguments = sys.argv

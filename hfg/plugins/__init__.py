@@ -1,9 +1,10 @@
 import pyxel
+import sys
 
 from uuid import uuid4
 from abc import ABC, abstractmethod
-from hfg.base import ThreadStorage, threaded
-from hfg.drawing import Drawable, ReferenceFrame
+from base import ThreadStorage, threaded
+from drawing import Drawable, ReferenceFrame
 
 
 DEFAULT_WIDTH = 30
@@ -104,7 +105,15 @@ class Hero(Enemy, ABC):
         cls.lose_animation = threaded(cls.lose_animation)
 
     @abstractmethod
+    def reset(self):
+        pass
+
+    @abstractmethod
     def selection_preview(self):
+        pass
+
+    @abstractmethod
+    def select(self):
         pass
 
     @abstractmethod
@@ -117,6 +126,10 @@ class Hero(Enemy, ABC):
 
     @abstractmethod
     def cycle_legs(self, direction):
+        pass
+
+    @abstractmethod
+    def start(self):
         pass
 
     @abstractmethod

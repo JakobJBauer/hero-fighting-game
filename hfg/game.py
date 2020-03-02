@@ -1,17 +1,18 @@
 import pyxel
 import time
-import hfg.plugins as plugins
+import sys
+import plugins
 import os.path
 
 from enum import Enum
 from copy import deepcopy
 
-from hfg.base import ThreadStorage, threaded
-from hfg.drawing import Drawable, ReferenceFrame
-from hfg.helpers import FillerHero, HeroBar
-from hfg.shapes import Line, Rectangle, Sprinkles, Text, Circle
-from hfg.plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
-from hfg.importer import Importer
+from base import ThreadStorage, threaded
+from drawing import Drawable, ReferenceFrame
+from helpers import FillerHero, HeroBar
+from shapes import Line, Rectangle, Sprinkles, Text, Circle
+from plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
+from importer import Importer
 
 DISPLAY_CAPTION = "Hero Fighting Game"
 DISPLAY_WIDTH = 256
@@ -74,7 +75,7 @@ MINIMUM_HERO_DISTANCE = 0
 
 
 class GameStates(Enum):
-    RESTART = 0
+    RESET = 0
     SELECT_RIGHT = 1
     SELECT_LEFT = 2
     START = 3
@@ -150,7 +151,7 @@ class App:
         self.display = Display()
 
         self.heroes = heroes
-        self.state = GameStates.RESTART
+        self.state = GameStates.RESET
 
         self.button_clf_max = CLF_DELAY * DISPLAY_FPS
         self.button_clf = 0
@@ -257,7 +258,7 @@ class App:
             self.state = next_state
 
     def update(self):
-        if self.state == GameStates.RESTART:
+        if self.state == GameStates.RESET:
             self.heroes_selection = HeroesSelection(self.heroes)
 
             self.state = GameStates.SELECT_RIGHT
@@ -345,7 +346,7 @@ class App:
             self.display.draw(Text(f"Game over! Player {position} ({winner_name}) wins!", 10, 10, pyxel.COLOR_WHITE,
                                    ReferenceFrame()))
             if not (self.right.running() or self.left.running()):
-                self.state = GameStates.RESTART
+                self.state = GameStates.RESET
 
     def draw(self):
         if CLEAR_SCREEN:
