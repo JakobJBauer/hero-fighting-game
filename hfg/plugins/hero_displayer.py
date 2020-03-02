@@ -2,8 +2,6 @@ import sys
 import pyxel
 import importlib
 
-sys.path.append("..")
-
 from plugins import Enemy, Hero
 
 

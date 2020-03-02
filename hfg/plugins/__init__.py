@@ -1,8 +1,6 @@
 import pyxel
 import sys
 
-sys.path.append("..")
-
 from uuid import uuid4
 from abc import ABC, abstractmethod
 from base import ThreadStorage, threaded
@@ -99,6 +97,7 @@ class Hero(Enemy, ABC):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.start_animation = threaded(cls.start_animation)
+        cls.fighting = threaded(cls.fighting)
         cls.attack = threaded(cls.attack)
         cls.super = threaded(cls.super)
         cls.block = threaded(cls.block)
@@ -107,7 +106,15 @@ class Hero(Enemy, ABC):
         cls.lose_animation = threaded(cls.lose_animation)
 
     @abstractmethod
+    def reset(self):
+        pass
+
+    @abstractmethod
     def selection_preview(self):
+        pass
+
+    @abstractmethod
+    def select(self):
         pass
 
     @abstractmethod
@@ -123,8 +130,16 @@ class Hero(Enemy, ABC):
         pass
 
     @abstractmethod
+    def start(self):
+        pass
+
+    @abstractmethod
     @threaded
     def start_animation(self, enemy: Enemy):
+        pass
+
+    @abstractmethod
+    def fighting(self):
         pass
 
     @abstractmethod
@@ -156,5 +171,3 @@ class Hero(Enemy, ABC):
     @threaded
     def lose_animation(self, enemy: Enemy):
         pass
-
-

@@ -2,7 +2,6 @@ import pyxel
 import random
 import sys
 
-sys.path.append("..")
 from drawing import Displayable, Rotatable
 
 
@@ -21,12 +20,12 @@ class Point(Displayable):
     def display(self):
         x, y = self.translate_point(self.x, self.y, self.frame)
 
-        pyxel.pset(x, y, self.color)
+        pyxel.pix(x, y, self.color)
 
     def display_left(self):
         x, y = self.translate_left(self.x, self.y, self.frame)
 
-        pyxel.pset(x, y, self.color)
+        pyxel.pix(x, y, self.color)
 
 
 class Line(Displayable, Rotatable):
@@ -75,7 +74,7 @@ class Rectangle(Displayable):
     def display_left(self):
         x, y = self.translate_left(self.x, self.y, self.frame)
 
-        pyxel.rect(x - self.width, y - self.height, self.width, self.height, self.color)
+        pyxel.rect(x - self.width + 1, y - self.height, self.width, self.height, self.color)
 
 
 class RectangleBorder(Rectangle):

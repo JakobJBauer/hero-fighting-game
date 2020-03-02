@@ -1,20 +1,20 @@
 import pyxel
 import time
 import sys
-
-sys.path.append("..")
 import plugins
 import os.path
+import random
 
 from enum import Enum
 from copy import deepcopy
 
-from base import ThreadStorage, threaded
-from drawing import Drawable, ReferenceFrame
-from helpers import FillerHero, HeroBar
-from shapes import Line, Rectangle, Sprinkles, Text, Circle
-from plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
-from importer import Importer
+from hfg.base import ThreadStorage, threaded
+from hfg.drawing import Drawable, ReferenceFrame
+from hfg.helpers import FillerHero, HeroBar
+from hfg.shapes import Line, Rectangle, Sprinkles, Text, Circle
+from hfg.plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
+from hfg.importer import Importer
+
 
 DISPLAY_CAPTION = "Hero Fighter Game"
 DISPLAY_WIDTH = 256
@@ -73,11 +73,11 @@ SELECTION_TEXT_COLOR = pyxel.COLOR_WHITE
 ROUND_HEIGHT_FROM_TOP = 8
 ROUND_TEXT_COLOR = pyxel.COLOR_WHITE
 
-MINIMUM_HERO_DISTANCE = 5
+MINIMUM_HERO_DISTANCE = 1
 
 
 class GameStates(Enum):
-    RESTART = 0
+    RESET = 0
     SELECT_RIGHT = 1
     SELECT_LEFT = 2
     START = 3
@@ -153,7 +153,7 @@ class App:
         self.display = Display()
 
         self.heroes = heroes
-        self.state = GameStates.RESTART
+        self.state = GameStates.RESET
 
         self.button_clf_max = CLF_DELAY * DISPLAY_FPS
         self.button_clf = 0
@@ -162,6 +162,9 @@ class App:
         self.right = None
         self.left = None
         self.left_is_winner = False
+
+        self.right_stable = None
+        self.left_stable = None
 
         self.round = 1
 
@@ -247,9 +250,6 @@ class App:
         self.right.clear()
         self.left.clear()
 
-        if self.right.x - self.left.x < MINIMUM_HERO_DISTANCE:
-            self.left.x = self.right.x - MINIMUM_HERO_DISTANCE
-
         if self.left.health < 1:
             self.state = GameStates.WIN_RIGHT
         elif self.right.health < 1:
@@ -260,7 +260,10 @@ class App:
             self.state = next_state
 
     def update(self):
-        if self.state == GameStates.RESTART:
+        if self.state == GameStates.RESET:
+            for hero in self.heroes:
+                hero.reset()
+
             self.heroes_selection = HeroesSelection(self.heroes)
 
             self.state = GameStates.SELECT_RIGHT
@@ -271,6 +274,7 @@ class App:
 
             if hero is not None:
                 self.right = hero
+                self.right.select()
                 self.state = GameStates.SELECT_LEFT
 
         elif self.state == GameStates.SELECT_LEFT:
@@ -279,12 +283,19 @@ class App:
 
             if hero is not None:
                 self.left = hero
+                self.left.select()
                 self.state = GameStates.START
                 self.button_clf = 0
 
         elif self.state == GameStates.START:
             self.left.move_frame(pyxel.width // 4, GROUND_HEIGHT)
             self.right.move_frame(3 * (pyxel.width // 4), GROUND_HEIGHT)
+
+            self.right_stable = 3 * (pyxel.width // 4)
+            self.left_stable = pyxel.width // 4
+
+            self.right.start()
+            self.left.start()
 
             self.right.store("start_animation", self.right.start_animation(self.left))
             self.left.store("start_animation", self.left.start_animation(self.right))
@@ -293,7 +304,13 @@ class App:
 
         elif self.state == GameStates.WAITING_START:
             if not (self.right.running() or self.left.running()):
-                self.state = GameStates.ROUND_RIGHT
+                self.right.fighting()
+                self.left.fighting()
+
+                if random.randint(0, 1):
+                    self.state = GameStates.ROUND_RIGHT
+                else:
+                    self.state = GameStates.ROUND_LEFT
 
         elif self.state == GameStates.ROUND_RIGHT:
             self.display.draw(Text(f"Right is playing ({self.right.title})", 10, 10,
@@ -348,7 +365,16 @@ class App:
             self.display.draw(Text(f"Game over! Player {position} ({winner_name}) wins!", 10, 10, pyxel.COLOR_WHITE,
                                    ReferenceFrame()))
             if not (self.right.running() or self.left.running()):
-                self.state = GameStates.RESTART
+                self.state = GameStates.RESET
+
+        if self.state == GameStates.ROUND_RIGHT or self.state == GameStates.WAITING_RIGHT \
+                or self.state == GameStates.ROUND_LEFT or self.state == GameStates.WAITING_LEFT:
+            if abs(self.right.x - self.left.x) < MINIMUM_HERO_DISTANCE:
+                self.right.x = self.right_stable
+                self.left.x = self.left_stable
+            else:
+                self.right_stable = self.right.x
+                self.left_stable = self.left.x
 
     def draw(self):
         if CLEAR_SCREEN:
