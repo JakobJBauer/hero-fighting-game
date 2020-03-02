@@ -7,11 +7,11 @@ import os
 from pydub import AudioSegment
 from pydub.playback import play
 
-sys.path.append("..")
 
-from plugins import Hero, Enemy, plugin
-from base import threaded
-from shapes import *
+from hfg.plugins import Hero, Enemy, plugin
+from hfg.base import threaded
+from hfg.shapes import *
+
 
 @plugin
 class DjinnHero(Hero):
@@ -19,7 +19,10 @@ class DjinnHero(Hero):
         super().__init__(width=60, height=70, name="djinn", title="Djinn", special_color=pyxel.COLOR_LIME)
         self.is_blocked = False
         # self.rect = Rectangle(0, 0, self.width, self.height, pyxel.COLOR_GREEN, self.frame)
-        #  self.sprinkles = Sprinkles(100, pyxel.COLOR_BROWN, self.rect)
+        # self.sprinkles = Sprinkles(100, pyxel.COLOR_BROWN, self.rect)
+
+    def reset(self):
+        pass
 
     def selection_preview(self):
 
@@ -147,7 +150,8 @@ class DjinnHero(Hero):
         self.select()
 
     def select(self):
-        song = AudioSegment.from_wav(os.path.join(os.path.dirname(__file__), "resources", "sounds", "Magic-sound-effect.wav"))
+        song = AudioSegment.from_wav(os.path.join(os.path.dirname(__file__),
+                                                  "resources", "sounds", "Magic-sound-effect.wav"))
         play(song)
 
     def cycle_heads(self, direction):
@@ -157,6 +161,9 @@ class DjinnHero(Hero):
         pass
 
     def cycle_legs(self, direction):
+        pass
+
+    def start(self):
         pass
 
     def start_animation(self, enemy):
