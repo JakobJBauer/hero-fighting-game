@@ -1,9 +1,9 @@
 import math
 import sys
 
-from base import threaded
-from plugins import Hero, Enemy
-from shapes import Line
+from hfg.base import threaded
+from hfg.plugins import Hero, Enemy
+from hfg.shapes import Line
 
 
 class HeroBar(Line):

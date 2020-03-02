@@ -97,6 +97,7 @@ class Hero(Enemy, ABC):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.start_animation = threaded(cls.start_animation)
+        cls.fighting = threaded(cls.fighting)
         cls.attack = threaded(cls.attack)
         cls.super = threaded(cls.super)
         cls.block = threaded(cls.block)
@@ -138,6 +139,10 @@ class Hero(Enemy, ABC):
         pass
 
     @abstractmethod
+    def fighting(self):
+        pass
+
+    @abstractmethod
     @threaded
     def attack(self, enemy: Enemy):
         pass
@@ -166,5 +171,3 @@ class Hero(Enemy, ABC):
     @threaded
     def lose_animation(self, enemy: Enemy):
         pass
-
-
