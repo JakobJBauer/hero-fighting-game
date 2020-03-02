@@ -83,7 +83,6 @@ class MonsterHero(Hero):
         self.y -= 3
 
     def win_animation(self, enemy: Enemy):
-        self.move_to(enemy, 5)
         for i in range(10):
             time.sleep(0.03)
             self.y += 1
