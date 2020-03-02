@@ -107,7 +107,15 @@ class Hero(Enemy, ABC):
         cls.lose_animation = threaded(cls.lose_animation)
 
     @abstractmethod
+    def reset(self):
+        pass
+
+    @abstractmethod
     def selection_preview(self):
+        pass
+
+    @abstractmethod
+    def select(self):
         pass
 
     @abstractmethod
@@ -120,6 +128,10 @@ class Hero(Enemy, ABC):
 
     @abstractmethod
     def cycle_legs(self, direction):
+        pass
+
+    @abstractmethod
+    def start(self):
         pass
 
     @abstractmethod
