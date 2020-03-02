@@ -4,8 +4,7 @@ import pyxel
 import time
 import sys
 import os
-from pydub import AudioSegment
-from pydub.playback import play
+import numpy
 
 sys.path.append("..")
 
@@ -23,6 +22,7 @@ class DjinnHero(Hero):
 
     def selection_preview(self):
 
+        # region Bitmap
         colors = [
             pyxel.COLOR_NAVY,
             pyxel.COLOR_RED,
@@ -137,6 +137,7 @@ class DjinnHero(Hero):
             [0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
+        # endregion
 
         for y in range(0,50):
             for x in range(0,50):
@@ -147,8 +148,32 @@ class DjinnHero(Hero):
         self.select()
 
     def select(self):
-        song = AudioSegment.from_wav(os.path.join(os.path.dirname(__file__), "resources", "sounds", "Magic-sound-effect.wav"))
-        play(song)
+        pass
+
+    def _body(self):
+        self.draw(Circle(37, 60, 7, pyxel.COLOR_NAVY, self.frame))
+        self.draw(Circle(35, 58, 6, pyxel.COLOR_NAVY, self.frame))
+        self.draw(Circle(34, 51, 9, pyxel.COLOR_NAVY, self.frame))
+        self.draw(Rectangle(18, 45, 30, 5, pyxel.COLOR_NAVY, self.frame))
+
+        # carpet
+        self.draw((Line(0, 4, 60, 4, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(0, 5, 4, 5, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(0, 4, 4, 4, pyxel.COLOR_BLACK, self.frame)))
+        self.draw((Line(8, 3, 12, 3, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(8, 4, 12, 4, pyxel.COLOR_BLACK, self.frame)))
+        self.draw((Line(16, 5, 20, 5, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(16, 4, 20, 4, pyxel.COLOR_BLACK, self.frame)))
+        self.draw((Line(24, 3, 28, 3, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(24, 4, 28, 4, pyxel.COLOR_BLACK, self.frame)))
+        self.draw((Line(32, 5, 36, 5, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(32, 4, 36, 4, pyxel.COLOR_BLACK, self.frame)))
+        self.draw((Line(40, 3, 44, 3, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(40, 4, 44, 4, pyxel.COLOR_BLACK, self.frame)))
+        self.draw((Line(48, 5, 52, 5, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(48, 4, 52, 4, pyxel.COLOR_BLACK, self.frame)))
+        self.draw((Line(56, 3, 60, 3, pyxel.COLOR_ORANGE, self.frame)))
+        self.draw((Line(56, 4, 60, 4, pyxel.COLOR_BLACK, self.frame)))
 
     def cycle_heads(self, direction):
         pass
@@ -160,19 +185,96 @@ class DjinnHero(Hero):
         pass
 
     def start_animation(self, enemy):
-        self.release()
-        self.move_to(enemy, 20)
-        for i in range(25):
-            time.sleep(0.03)
-            self.y += 1
+        self._body()
 
-        for i in range(25):
-            time.sleep(0.03)
-            self.y -= 1
+        self.release()
 
     def attack(self, enemy: Enemy):
-        if abs(enemy.x - self.x) < 20:
-            enemy.get_attacked(self, 30)
+        xy: list = list()
+        attacks = numpy.random.randint(2, 5)
+        ready_attacks = []
+
+        for i in range(attacks):
+            xy.append((numpy.random.randint(- 4, 1), numpy.random.randint(self.y, self.height)))
+
+        for x, y in xy:
+            current_y = 0
+            while current_y < y:
+                self._body()
+                self.draw(CircleBorder(x, current_y + 3, 1, pyxel.COLOR_LIME, self.frame))
+                self.draw(Line(x, current_y + 2, x, current_y, pyxel.COLOR_LIME, self.frame))
+                self.draw(Line(x - 1, current_y, x + 1, current_y, pyxel.COLOR_LIME, self.frame))
+                self.draw((Point(x - 2, current_y - 2, pyxel.COLOR_ORANGE, self.frame)))
+                self.draw((Point(x - 1, current_y - 3, pyxel.COLOR_ORANGE, self.frame)))
+                self.draw((Point(x, current_y - 2, pyxel.COLOR_ORANGE, self.frame)))
+                self.draw((Point(x + 1, current_y - 3, pyxel.COLOR_ORANGE, self.frame)))
+                self.draw((Point(x + 2, current_y - 2, pyxel.COLOR_ORANGE, self.frame)))
+
+                for ready_attack in ready_attacks:
+                    for shape in ready_attack:
+                        if shape[0] == "CircleBorder":
+                            self.draw(CircleBorder(shape[1], shape[2], shape[3], shape[4], shape[5]))
+                        elif shape[0] == "Line":
+                            self.draw((Line(shape[1], shape[2], shape[3], shape[4], shape[5], shape[6])))
+                        elif shape[0] == "Point":
+                            self.draw(Point(shape[1], shape[2], shape[3], shape[4]))
+                        else:
+                            raise ValueError(f"'shape[0]' is incorrect")
+
+                self.release()
+                time.sleep(0.02)
+                current_y += 1
+
+            ready_attacks.append([
+                ["CircleBorder", x, current_y + 3, 1, pyxel.COLOR_LIME, self.frame],
+                ["Line", x, current_y + 2, x, current_y, pyxel.COLOR_LIME, self.frame],
+                ["Line", x - 1, current_y, x + 1, current_y, pyxel.COLOR_LIME, self.frame],
+                ["Point", x - 2, current_y - 2, pyxel.COLOR_ORANGE, self.frame],
+                ["Point", x - 1, current_y - 3, pyxel.COLOR_ORANGE, self.frame],
+                ["Point", x, current_y - 2, pyxel.COLOR_ORANGE, self.frame],
+                ["Point", x + 1, current_y - 3, pyxel.COLOR_ORANGE, self.frame],
+                ["Point", x + 2, current_y - 2, pyxel.COLOR_ORANGE, self.frame]
+            ])
+
+        from plugins import ReferenceFrame
+        for i in range(len(ready_attacks)):
+            x = 0
+            while (enemy.x + x) - self.x > -(enemy.width/2) or (self.x + x) - enemy.x > -(enemy.width/2):
+                x -= 1
+                self._body()
+
+                for shape in ready_attacks[0]:
+                    if shape[0] == "CircleBorder":
+                        shape[1] -= 1
+                    elif shape[0] == "Line":
+                        shape[1] -= 1
+                        shape[3] -= 1
+                    elif shape[0] == "Point":
+                        shape[1] -= 1
+                    else:
+                        raise ValueError(f"'shape[0]' is incorrect")
+
+                for ready_attack_2 in ready_attacks:
+                    for shape in ready_attack_2:
+                        if shape[0] == "CircleBorder":
+                            self.draw(CircleBorder(shape[1], shape[2], shape[3], shape[4], shape[5]))
+                        elif shape[0] == "Line":
+                            self.draw((Line(shape[1], shape[2], shape[3], shape[4], shape[5], shape[6])))
+                        elif shape[0] == "Point":
+                            self.draw(Point(shape[1], shape[2], shape[3], shape[4]))
+                        else:
+                            raise ValueError(f"'shape[0]' is incorrect")
+
+                time.sleep(0.02)
+                self.release()
+
+            if (ready_attacks[0][2][2] > enemy.y) and (ready_attacks[0][2][2] < enemy.y + enemy.height):
+                enemy.get_attacked(self, 30)
+
+            ready_attacks.pop(0)
+
+        self._body()
+        self.release()
 
     def super(self, enemy: Enemy):
         for i in range(100):
@@ -225,6 +327,9 @@ class DjinnHero(Hero):
     def get_attacked(self, enemy, damage):
         if not self.is_blocked:
             self.health -= damage
+
+        if self.health < 0:
+            self.health = 0
         self.is_blocked = False
 
     def get_pushed(self, enemy, distance):

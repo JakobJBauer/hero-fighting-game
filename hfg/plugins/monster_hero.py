@@ -105,6 +105,8 @@ class MonsterHero(Hero):
     def get_attacked(self, enemy, damage):
         if not self.is_blocked:
             self.health -= damage
+        if self.health < 0:
+            self.health = 0
         self.is_blocked = False
 
     def get_pushed(self, enemy, distance):
