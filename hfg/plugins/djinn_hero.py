@@ -8,12 +8,10 @@ import numpy
 import math
 from threading import Thread
 
-sys.path.append("..")
-
-from plugins import Hero, Enemy, plugin
-from base import threaded
-from shapes import *
-from drawing import ReferenceFrame
+from hfg.plugins import Hero, Enemy, plugin
+from hfg.base import threaded
+from hfg.shapes import *
+from hfg.drawing import ReferenceFrame
 
 @plugin
 class DjinnHero(Hero):

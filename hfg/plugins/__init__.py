@@ -3,8 +3,8 @@ import sys
 
 from uuid import uuid4
 from abc import ABC, abstractmethod
-from base import ThreadStorage, threaded
-from drawing import Drawable, ReferenceFrame
+from hfg.base import ThreadStorage, threaded
+from hfg.drawing import Drawable, ReferenceFrame
 
 
 DEFAULT_WIDTH = 30

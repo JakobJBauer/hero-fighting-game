@@ -2,7 +2,7 @@ import pyxel
 import random
 import sys
 
-from drawing import Displayable, Rotatable
+from hfg.drawing import Displayable, Rotatable
 
 
 class Point(Displayable):

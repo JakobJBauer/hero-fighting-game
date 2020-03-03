@@ -8,12 +8,12 @@ import random
 from enum import Enum
 from copy import deepcopy
 
-from base import ThreadStorage, threaded
-from drawing import Drawable, ReferenceFrame
-from helpers import FillerHero, HeroBar
-from shapes import Line, Rectangle, Sprinkles, Text, Circle
-from plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
-from importer import Importer
+from hfg.base import ThreadStorage, threaded
+from hfg.drawing import Drawable, ReferenceFrame
+from hfg.helpers import FillerHero, HeroBar
+from hfg.shapes import Line, Rectangle, Sprinkles, Text, Circle
+from hfg.plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
+from hfg.importer import Importer
 
 
 DISPLAY_CAPTION = "Hero Fighter Game"

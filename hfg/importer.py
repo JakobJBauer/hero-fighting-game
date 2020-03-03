@@ -2,10 +2,9 @@ import importlib
 import os.path
 import sys
 
-from plugins.test_hero import TestHero
-from plugins.monster_hero import MonsterHero
-from plugins.djinn_hero import DjinnHero
-#from plugins.djinn_hero import DjinnHero
+from hfg.plugins.test_hero import TestHero
+from hfg.plugins.monster_hero import MonsterHero
+from hfg.plugins.djinn_hero import DjinnHero
 
 HERO_MODULE_ENDING = "_hero.py"
 
