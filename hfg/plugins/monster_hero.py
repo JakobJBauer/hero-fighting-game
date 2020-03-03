@@ -2,9 +2,9 @@ import pyxel
 import time
 import sys
 
-from hfg.plugins import Hero, Enemy, plugin
-from hfg.base import threaded
-from hfg.shapes import *
+from plugins import Hero, Enemy, plugin
+from base import threaded
+from shapes import *
 
 
 @plugin

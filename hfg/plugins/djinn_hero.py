@@ -236,7 +236,6 @@ class DjinnHero(Hero):
                 ["Point", x + 2, current_y - 2, pyxel.COLOR_ORANGE, self.frame]
             ])
 
-        from plugins import ReferenceFrame
         for i in range(len(ready_attacks)):
             x = 0
             while (enemy.x + x) - self.x > -(enemy.width/2) or (self.x + x) - enemy.x > -(enemy.width/2):
