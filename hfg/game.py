@@ -16,7 +16,7 @@ from hfg.plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HE
 from hfg.importer import Importer
 
 
-DISPLAY_CAPTION = "Hero Fighter Game"
+DISPLAY_CAPTION = "Hero Fighting Game"
 DISPLAY_WIDTH = 256
 DISPLAY_HEIGHT = 128
 DISPLAY_FPS = 60
@@ -73,7 +73,7 @@ SELECTION_TEXT_COLOR = pyxel.COLOR_WHITE
 ROUND_HEIGHT_FROM_TOP = 8
 ROUND_TEXT_COLOR = pyxel.COLOR_WHITE
 
-MINIMUM_HERO_DISTANCE = 1
+MINIMUM_HERO_DISTANCE = 0
 
 
 class GameStates(Enum):
