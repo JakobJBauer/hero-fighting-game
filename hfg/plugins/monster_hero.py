@@ -2,9 +2,9 @@ import pyxel
 import time
 import sys
 
-from plugins import Hero, Enemy, plugin
-from base import threaded
-from shapes import *
+from hfg.plugins import Hero, Enemy, plugin
+from hfg.base import threaded
+from hfg.shapes import *
 
 
 @plugin
@@ -25,9 +25,15 @@ class MonsterHero(Hero):
         self.draw(Rectangle(10, 10, self.width - 20, 30, pyxel.COLOR_BLACK, self.frame))
         self.draw(Rectangle(12, 10, self.width - 20 - 4, 4, pyxel.COLOR_RED, self.frame))
 
+    def reset(self):
+        pass
+
     def selection_preview(self):
         self._body()
         self.release()
+
+    def select(self):
+        pass
 
     def cycle_heads(self, direction):
         pass
@@ -36,6 +42,9 @@ class MonsterHero(Hero):
         pass
 
     def cycle_legs(self, direction):
+        pass
+
+    def start(self):
         pass
 
     def start_animation(self, enemy):
@@ -47,6 +56,9 @@ class MonsterHero(Hero):
         for i in range(25):
             time.sleep(0.03)
             self.y -= 1
+
+    def fighting(self):
+        pass
 
     def attack(self, enemy: Enemy):
         if abs(enemy.x - self.x) < 20:
@@ -102,6 +114,8 @@ class MonsterHero(Hero):
     def get_attacked(self, enemy, damage):
         if not self.is_blocked:
             self.health -= damage
+        if self.health < 0:
+            self.health = 0
         self.is_blocked = False
 
     def get_pushed(self, enemy, distance):

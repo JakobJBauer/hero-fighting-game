@@ -2,7 +2,7 @@ import pyxel
 import random
 import sys
 
-from drawing import Displayable, Rotatable
+from hfg.drawing import Displayable, Rotatable
 
 
 class Point(Displayable):
@@ -74,7 +74,7 @@ class Rectangle(Displayable):
     def display_left(self):
         x, y = self.translate_left(self.x, self.y, self.frame)
 
-        pyxel.rect(x - self.width, y - self.height, self.width, self.height, self.color)
+        pyxel.rect(x - self.width + 1, y - self.height, self.width, self.height, self.color)
 
 
 class RectangleBorder(Rectangle):

@@ -3,16 +3,18 @@ import time
 import sys
 import plugins
 import os.path
+import random
 
 from enum import Enum
 from copy import deepcopy
 
-from base import ThreadStorage, threaded
-from drawing import Drawable, ReferenceFrame
-from helpers import FillerHero, HeroBar
-from shapes import Line, Rectangle, Sprinkles, Text, Circle
-from plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
-from importer import Importer
+from hfg.base import ThreadStorage, threaded
+from hfg.drawing import Drawable, ReferenceFrame
+from hfg.helpers import FillerHero, HeroBar
+from hfg.shapes import Line, Rectangle, Sprinkles, Text, Circle
+from hfg.plugins import Hero, Enemy, DEFAULT_HEALTH, DEFAULT_SPECIAL, DEFAULT_HEIGHT, DEFAULT_WIDTH
+from hfg.importer import Importer
+
 
 DISPLAY_CAPTION = "Hero Fighting Game"
 DISPLAY_WIDTH = 256
@@ -39,7 +41,7 @@ BACKGROUND_COLOR = pyxel.COLOR_BLACK
 GROUND_HEIGHT = 30
 
 GROUND_COLOR = pyxel.COLOR_BROWN
-GROUND_SPRINKLES_COLOR = pyxel.COLOR_LIGHTGRAY
+GROUND_SPRINKLES_COLOR = pyxel.COLOR_LIGHT_BLUE # Light Gray
 GROUND_LINE_COLOR = pyxel.COLOR_GREEN
 
 SELECTION_HEIGHT = 30
@@ -50,7 +52,7 @@ SELECTION_STEP = 4
 
 SELECTION_LEFT_KEY = pyxel.KEY_LEFT
 SELECTION_RIGHT_KEY = pyxel.KEY_RIGHT
-SELECTION_ENTER_KEY = pyxel.KEY_ENTER
+SELECTION_ENTER_KEY = pyxel.KEY_RETURN # KEY_ENTER
 
 FIGHT_LEFT_KEY = pyxel.KEY_LEFT
 FIGHT_RIGHT_KEY = pyxel.KEY_RIGHT
@@ -145,7 +147,7 @@ class Display(Drawable):
 
 class App:
     def __init__(self, heroes: list):
-        pyxel.init(DISPLAY_WIDTH, DISPLAY_HEIGHT, caption=DISPLAY_CAPTION, fps=DISPLAY_FPS)
+        pyxel.init(DISPLAY_WIDTH, DISPLAY_HEIGHT, title=DISPLAY_CAPTION, fps=DISPLAY_FPS) # caption instead of title
         pyxel.mouse(SHOW_MOUSE)
 
         self.display = Display()
@@ -160,6 +162,9 @@ class App:
         self.right = None
         self.left = None
         self.left_is_winner = False
+
+        self.right_stable = None
+        self.left_stable = None
 
         self.round = 1
 
@@ -245,9 +250,6 @@ class App:
         self.right.clear()
         self.left.clear()
 
-        if self.right.x - self.left.x < MINIMUM_HERO_DISTANCE:
-            self.left.x = self.right.x - MINIMUM_HERO_DISTANCE
-
         if self.left.health < 1:
             self.state = GameStates.WIN_RIGHT
         elif self.right.health < 1:
@@ -259,6 +261,9 @@ class App:
 
     def update(self):
         if self.state == GameStates.RESET:
+            for hero in self.heroes:
+                hero.reset()
+
             self.heroes_selection = HeroesSelection(self.heroes)
 
             self.state = GameStates.SELECT_RIGHT
@@ -269,6 +274,7 @@ class App:
 
             if hero is not None:
                 self.right = hero
+                self.right.select()
                 self.state = GameStates.SELECT_LEFT
 
         elif self.state == GameStates.SELECT_LEFT:
@@ -277,12 +283,19 @@ class App:
 
             if hero is not None:
                 self.left = hero
+                self.left.select()
                 self.state = GameStates.START
                 self.button_clf = 0
 
         elif self.state == GameStates.START:
             self.left.move_frame(pyxel.width // 4, GROUND_HEIGHT)
             self.right.move_frame(3 * (pyxel.width // 4), GROUND_HEIGHT)
+
+            self.right_stable = 3 * (pyxel.width // 4)
+            self.left_stable = pyxel.width // 4
+
+            self.right.start()
+            self.left.start()
 
             self.right.store("start_animation", self.right.start_animation(self.left))
             self.left.store("start_animation", self.left.start_animation(self.right))
@@ -291,7 +304,13 @@ class App:
 
         elif self.state == GameStates.WAITING_START:
             if not (self.right.running() or self.left.running()):
-                self.state = GameStates.ROUND_RIGHT
+                self.right.fighting()
+                self.left.fighting()
+
+                if random.randint(0, 1):
+                    self.state = GameStates.ROUND_RIGHT
+                else:
+                    self.state = GameStates.ROUND_LEFT
 
         elif self.state == GameStates.ROUND_RIGHT:
             self.display.draw(Text(f"Right is playing ({self.right.title})", 10, 10,
@@ -347,6 +366,15 @@ class App:
                                    ReferenceFrame()))
             if not (self.right.running() or self.left.running()):
                 self.state = GameStates.RESET
+
+        if self.state == GameStates.ROUND_RIGHT or self.state == GameStates.WAITING_RIGHT \
+                or self.state == GameStates.ROUND_LEFT or self.state == GameStates.WAITING_LEFT:
+            if abs(self.right.x - self.left.x) < MINIMUM_HERO_DISTANCE:
+                self.right.x = self.right_stable
+                self.left.x = self.left_stable
+            else:
+                self.right_stable = self.right.x
+                self.left_stable = self.left.x
 
     def draw(self):
         if CLEAR_SCREEN:

@@ -1,10 +1,15 @@
 import pyxel
 import sys
+from pathlib import Path
+
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+
 
 from uuid import uuid4
 from abc import ABC, abstractmethod
-from base import ThreadStorage, threaded
-from drawing import Drawable, ReferenceFrame
+from hfg.base import ThreadStorage, threaded
+from hfg.drawing import Drawable, ReferenceFrame
 
 
 DEFAULT_WIDTH = 30
@@ -97,6 +102,7 @@ class Hero(Enemy, ABC):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.start_animation = threaded(cls.start_animation)
+        cls.fighting = threaded(cls.fighting)
         cls.attack = threaded(cls.attack)
         cls.super = threaded(cls.super)
         cls.block = threaded(cls.block)
@@ -138,6 +144,10 @@ class Hero(Enemy, ABC):
         pass
 
     @abstractmethod
+    def fighting(self):
+        pass
+
+    @abstractmethod
     @threaded
     def attack(self, enemy: Enemy):
         pass
@@ -166,5 +176,3 @@ class Hero(Enemy, ABC):
     @threaded
     def lose_animation(self, enemy: Enemy):
         pass
-
-
