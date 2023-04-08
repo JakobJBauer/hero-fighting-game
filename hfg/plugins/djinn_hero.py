@@ -28,7 +28,7 @@ class DjinnHero(Hero):
             pyxel.COLOR_NAVY,
             pyxel.COLOR_RED,
             pyxel.COLOR_BLACK,
-            pyxel.COLOR_DARKGRAY,
+            pyxel.COLOR_GRAY, # Color Darkgray
             pyxel.COLOR_WHITE,
             pyxel.COLOR_RED,
             pyxel.COLOR_PINK,
@@ -156,7 +156,7 @@ class DjinnHero(Hero):
             pyxel.COLOR_NAVY,
             pyxel.COLOR_RED,
             pyxel.COLOR_BLACK,
-            pyxel.COLOR_DARKGRAY,
+            pyxel.COLOR_GRAY, # DARKGREY
             pyxel.COLOR_WHITE,
             pyxel.COLOR_RED,
             pyxel.COLOR_PINK,
@@ -235,6 +235,8 @@ class DjinnHero(Hero):
         self._carpet()
 
         self.release()
+        self._body()
+        self._carpet()
 
     def _sprinkles(self, show_body=True):
         for i in range(20):

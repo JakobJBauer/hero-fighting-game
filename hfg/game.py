@@ -41,7 +41,7 @@ BACKGROUND_COLOR = pyxel.COLOR_BLACK
 GROUND_HEIGHT = 30
 
 GROUND_COLOR = pyxel.COLOR_BROWN
-GROUND_SPRINKLES_COLOR = pyxel.COLOR_LIGHTGRAY
+GROUND_SPRINKLES_COLOR = pyxel.COLOR_LIGHT_BLUE # Light Gray
 GROUND_LINE_COLOR = pyxel.COLOR_GREEN
 
 SELECTION_HEIGHT = 30
@@ -52,7 +52,7 @@ SELECTION_STEP = 4
 
 SELECTION_LEFT_KEY = pyxel.KEY_LEFT
 SELECTION_RIGHT_KEY = pyxel.KEY_RIGHT
-SELECTION_ENTER_KEY = pyxel.KEY_ENTER
+SELECTION_ENTER_KEY = pyxel.KEY_RETURN # KEY_ENTER
 
 FIGHT_LEFT_KEY = pyxel.KEY_LEFT
 FIGHT_RIGHT_KEY = pyxel.KEY_RIGHT
@@ -147,7 +147,7 @@ class Display(Drawable):
 
 class App:
     def __init__(self, heroes: list):
-        pyxel.init(DISPLAY_WIDTH, DISPLAY_HEIGHT, caption=DISPLAY_CAPTION, fps=DISPLAY_FPS)
+        pyxel.init(DISPLAY_WIDTH, DISPLAY_HEIGHT, title=DISPLAY_CAPTION, fps=DISPLAY_FPS) # caption instead of title
         pyxel.mouse(SHOW_MOUSE)
 
         self.display = Display()
